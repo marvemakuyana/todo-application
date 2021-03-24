@@ -12,6 +12,27 @@ class TodoItem extends React.Component{
         };
         this.handleDestroy = this.handleDestroy.bind(this);
         this.path = `/api/v1/todo_items/${this.props.todoItem.id}`;
+        this.handleChange = this.handleChange.bind(this);
+        this.updateTodoItem = this.updateTodoItem.bind(this);
+        this.inputRef = React.createRef();
+        this.completeRef = React.createRef();
+    }
+    handleChange(){
+        this.updateTodoItem();
+    }
+    updateTodoItem() {
+        this.setState({ complete: this.completeRef.current.checked });
+        setAxiosHeaders();
+        axios.put(this.path, {
+            todo_item: {
+                title: this.inputRef.current.value,
+                complete: this.completeRef.current.checked
+            }
+        })
+        .then(response => {console.log(response)})
+        .catch(error => {
+            console.log(error);
+        })
     }
     handleDestroy(){
         setAxiosHeaders();
@@ -52,11 +73,14 @@ class TodoItem extends React.Component{
                     </svg>
                 </td>
                 <td>
-                    <input type="text"
-                    defaultValue={todoItem.title}
-                    disabled={this.state.complete}
-                    className="form-control"
-                    id={`todoItem__title-${todoItem.id}`} />
+                    <input 
+                        type="text"
+                        defaultValue={todoItem.title}
+                        disabled={this.state.complete}
+                        onChange={this.handleChange}
+                        ref={this.inputRef}
+                        className="form-control"
+                        id={`todoItem__title-${todoItem.id}`} />
                 </td>
                 <td className="text-right">
                     <div className="form-check form-check-inline">
@@ -64,6 +88,8 @@ class TodoItem extends React.Component{
                             type="boolean"
                             defaultChecked={this.state.complete}
                             type="checkbox"
+                            onChange={this.handleChange}
+                            ref={this.completeRef}
                             className="form-check-input"
                             id={`complete-${todoItem.id}`} />
                         <label

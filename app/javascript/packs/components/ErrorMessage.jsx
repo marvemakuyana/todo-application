@@ -5,6 +5,7 @@ import _ from 'lodash';
 
 const ErrorMessage = props => {
     const data = _.get(props.errorMessage, "response.data", null);
+    const message = _.get(props.errorMessage, "message", null);
     if (data) {
         const keys = Object.keys(data);
         return keys.map(key => {
@@ -17,12 +18,16 @@ const ErrorMessage = props => {
                 </div>
             );
         })
-    } else{
+    } else if (message){
         return(
             <div className="alert alert-danger" role="alert">
-                <p className="mb-0">There was an error</p>
+                <p className="mb-0">{message}</p>
             </div>
         );
+    } else {
+        <div className="alert alert-danger" role="alert">
+            <p className="mb-0">There was an error.</p>
+        </div>
     }
 }
 export default ErrorMessage

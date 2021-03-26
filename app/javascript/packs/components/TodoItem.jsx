@@ -32,9 +32,13 @@ class TodoItem extends React.Component{
                 complete: this.completeRef.current.checked
             }
         })
-        .then(response => {console.log(response)})
+        .then(() => {
+            this.props.clearErrors();
+            //console.log(response)
+        })
         .catch(error => {
-            console.log(error);
+            this.props.handleErrors(error);
+            //console.log(error);
         })
     }, 1000);
     handleDestroy(){
@@ -116,5 +120,6 @@ export default TodoItem
 TodoItem.propTypes = {
     todoItem: PropTypes.object.isRequired,
     getTodoItems: PropTypes.func.isRequired,
-    hideCompletedTodoItems: PropTypes.bool.isRequired
+    hideCompletedTodoItems: PropTypes.bool.isRequired,
+    clearErrors: PropTypes.func.isRequired
 }
